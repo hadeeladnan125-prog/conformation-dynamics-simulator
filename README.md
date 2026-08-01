@@ -19,7 +19,10 @@ The simulation treats protein units as lattice nodes operating under a two-state
 2. **Catalytic Transition (Induced Conversion):**
    $$P_{\text{induced}} = 1 - \exp\left(-k_{\text{cat}} \cdot N_S \cdot \exp\left(-\frac{\Delta E - \delta E}{k_B T}\right)\right)$$
    where $N_S$ is the number of adjacent misfolded neighbors, and $\delta E$ represents the activation barrier lowering due to steric contact.
+### Simulation Results
+Below is the numerical result showing the sigmoidal propagation of the misfolded state $S$ over time:
 
+![Conformation Propagation Dynamics](propagation_dynamics.png)
 ---
 
 ## Project Structure
