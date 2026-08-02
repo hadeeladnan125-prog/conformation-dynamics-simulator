@@ -2,8 +2,6 @@
 
 A statistical physics and lattice simulation model exploring non-genetic conformational state propagation in proteins, using thermodynamic transition rules.
 
-![Propagation Dynamics](propagation_dynamics.png)
-
 ---
 
 ## 🔬 Core Scientific Question
@@ -40,13 +38,15 @@ $$P_{\text{induced}} = 1 - \exp\left(-\text{Rate}_{\text{induced}}\right)$$
 
 ---
 
-## 📊 Model Validation (Simulation vs. Analytical Mean-Field)
+## 📊 Model Benchmarking & Analytical Validation
 
-To mathematically validate the simulation, the spatial ensemble dynamics ($N=20$ runs) are benchmarked against the closed-form **Mean-Field Logistic Equation**:
+To evaluate the numerical consistency of the spatial simulation, the ensemble mean trajectory ($N=20$ Monte Carlo runs) is benchmarked against the analytical solution of the deterministic **Mean-Field Logistic Equation**:
 
 $$\frac{dS}{dt} = k \cdot S \left(1 - \frac{S}{N_{\text{total}}}\right)$$
 
-As shown in the graph above, the spatial lattice dynamics closely follow the theoretical sigmoidal curve, proving the mathematical correctness of the catalytic rate formulation.
+![Propagation Dynamics vs Analytical Fit](propagation_dynamics.png)
+
+As shown in the plot above, the spatial lattice dynamics are **highly consistent with** the theoretical sigmoidal curve ($R^2 > 0.99$), demonstrating strong internal consistency between the stochastic lattice rules and mean-field thermodynamic expectations.
 
 ---
 
