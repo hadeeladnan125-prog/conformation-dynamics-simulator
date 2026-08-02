@@ -55,6 +55,11 @@ def run_statistical_simulation():
   )
   s_analytical = logistic_model(time_steps, *popt)
 
+  # Quantitative Validation Metric (R-squared)
+  ss_res = np.sum((s_mean - s_analytical) ** 2)
+  ss_tot = np.sum((s_mean - np.mean(s_mean)) ** 2)
+  r_squared = 1 - (ss_res / ss_tot)
+
   # Plotting Simulation vs Analytical Fit
   fig, ax = plt.subplots(figsize=(9, 5.5), dpi=300)
 
@@ -82,7 +87,7 @@ def run_statistical_simulation():
       color="#002b36",
       linestyle="--",
       linewidth=2.0,
-      label="Analytical Mean-Field Fit",
+      label=f"Analytical Mean-Field Fit ($R^2 = {r_squared:.4f}$)",
   )
 
   ax.set_title(
@@ -101,11 +106,11 @@ def run_statistical_simulation():
   plt.tight_layout()
   plt.savefig("propagation_dynamics.png", dpi=300)
   print(
-      "Simulation complete! Graph saved as 'propagation_dynamics.png' with"
-      " Analytical Validation."
+      f"Simulation complete! Graph saved as 'propagation_dynamics.png' (R^2 ="
+      f" {r_squared:.4f})."
   )
 
 
 if __name__ == "__main__":
   run_statistical_simulation()
-    
+  
