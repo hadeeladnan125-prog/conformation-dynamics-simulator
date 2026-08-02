@@ -44,7 +44,8 @@ To evaluate the numerical consistency of the spatial simulation, the ensemble me
 
 $$\frac{dS}{dt} = k \cdot S \left(1 - \frac{S}{N_{\text{total}}}\right)$$
 
-![Propagation Dynamics vs Analytical Fit](propagation_dynamics.png)
+![Propagation Dynamics vs Analytical Fit](propagation_dynamics%20(2).png)
+
 
 As shown in the plot above, the spatial lattice dynamics are **highly consistent with** the theoretical sigmoidal curve ($R^2 > 0.99$), demonstrating strong internal consistency between the stochastic lattice rules and mean-field thermodynamic expectations.
 
