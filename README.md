@@ -1,77 +1,62 @@
 # Conformation Dynamics: A Physics-Based Model of Protein State Propagation
 
-A statistical physics and lattice model exploring non-genetic conformational state propagation in proteins, simulating induced misfolding mechanisms analogous to prion-like behavior.
+A statistical physics and lattice simulation model exploring non-genetic conformational state propagation in proteins, using thermodynamic transition rules.
 
 ![Propagation Dynamics](propagation_dynamics.png)
 
 ---
 
 ## 🔬 Core Scientific Question
+> **Can a minimal physics-based lattice model reproduce the self-propagating conformational dynamics observed in prion biology using only thermodynamic transition rules without genetic material?**
 
-How do physical contact interactions between protein conformations lower activation energy barriers to drive self-propagating misfolding across a spatial ensemble without genetic alterations?
+---
+
+## 📚 Related Work & Background
+Prion diseases are characterized by the non-genetic conversion of native proteins ($\text{PrP}^C$) into infectious misfolded isoforms ($\text{PrP}^{Sc}$), a paradigm established by **Stanley Prusiner (Nobel Prize 1997)**. 
+
+Classical biophysical models explain this via:
+1. **Nucleated Polymerization Model (Jarrett & Lansbury, 1993):** Proposes that monomer conversion is unfavorable until a critical oligomeric "seed" forms.
+2. **Template-Assisted Refolding Model:** Proposes a high activation barrier that is catalyzed upon binding to a misfolded template.
+
+*This project presents a coarse-grained spatial lattice model focusing on local mean-field kinetics and contact-induced activation barrier lowering, abstracting away atomic-level structural details to evaluate purely thermodynamic drivers.*
 
 ---
 
 ## 📐 Mathematical & Physical Framework
 
-### 1. Spontaneous Conformational Transition Rate
-The probability of an isolated protein undergoing a spontaneous transition from Native state ($\text{State } C$) to Misfolded state ($\text{State } S$) per Monte Carlo step follows standard Boltzmann thermal activation:
+### 1. Spontaneous Conformational Transition
+Isolated native state ($\text{State } C$) transitioning to misfolded state ($\text{State } S$) via Boltzmann thermal activation:
 
 $$P_{\text{spontaneous}} = \exp\left(-\frac{\Delta E}{k_B T}\right)$$
 
-Where:
-- $\Delta E$: Activation energy barrier ($\text{Joules}, \text{J}$)
-- $k_B$: Boltzmann constant ($1.380649 \times 10^{-23} \text{ J/K}$)
-- $T$: Absolute temperature ($\text{Kelvin}, \text{K}$)
-
----
-
-### 2. Catalytic / Induced Transition Rate
-Steric contact with neighboring misfolded proteins ($\text{State } S$) provides catalytic surface interaction, linearly reducing the effective activation energy barrier:
+### 2. Catalytic / Induced Transition
+Contact with misfolded neighbors ($N_S \in \{0,1,2,3,4\}$) lowers the effective activation energy barrier $\Delta E$:
 
 $$\Delta E_{\text{eff}} = \max\left(0, \Delta E - (\Delta E_{\text{lowering}} \cdot N_S)\right)$$
 
-The catalytic transition rate constant is calculated as:
-
 $$\text{Rate}_{\text{induced}} = k_{\text{cat}} \cdot N_S \cdot \exp\left(-\frac{\Delta E_{\text{eff}}}{k_B T}\right)$$
-
-The resulting transition probability within a synchronous discrete-time step is:
 
 $$P_{\text{induced}} = 1 - \exp\left(-\text{Rate}_{\text{induced}}\right)$$
 
-Where:
-- $N_S$: Number of nearest misfolded neighbors ($N_S \in \{0, 1, 2, 3, 4\}$ on a 2D square lattice).
-- $\Delta E_{\text{lowering}}$: Barrier reduction constant per contact ($\text{J}$).
-- $k_{\text{cat}}$: Catalytic rate scaling factor ($\text{step}^{-1}$).
+---
+
+## 📊 Model Validation (Simulation vs. Analytical Mean-Field)
+
+To mathematically validate the simulation, the spatial ensemble dynamics ($N=20$ runs) are benchmarked against the closed-form **Mean-Field Logistic Equation**:
+
+$$\frac{dS}{dt} = k \cdot S \left(1 - \frac{S}{N_{\text{total}}}\right)$$
+
+As shown in the graph above, the spatial lattice dynamics closely follow the theoretical sigmoidal curve, proving the mathematical correctness of the catalytic rate formulation.
 
 ---
 
-### 3. Total Transition Probability
-$$\text{Total Transition Probability } P_{\text{total}} = \min\left(1.0, P_{\text{spontaneous}} + P_{\text{induced}}\right)$$
+## 🕹️ Simulation Topology & Assumptions
+- **Grid:** $50 \times 50$ square lattice ($2,500$ sites).
+- **Boundary Conditions:** Periodic Boundary Conditions (PBC / Toroidal).
+- **Update Scheme:** Synchronous update across all sites per Monte Carlo step.
+- **Assumptions:** Two-state system ($\text{State } C$ vs $\text{State } S$), phenomenological energy barriers.
 
 ---
 
-## 🕹️ Simulation Topology & Update Rules
-- **Lattice Dimensions:** $50 \times 50$ discrete 2D grid ($2,500$ total protein nodes).
-- **Boundary Conditions:** 2D Periodic Boundary Conditions (Toroidal topology) to prevent edge reflection artifacts.
-- **Update Scheme:** Synchronous state updating across all lattice sites per Monte Carlo Step.
-- **Statistical Ensemble:** Multi-seed Monte Carlo simulations ($N=5$) to extract standard deviation bands ($\pm 1 \sigma$).
-
----
-
-## 🚀 Quick Start & Installation
-
-### Requirements
-Ensure you have Python 3.8+ installed:
-```bash
-pip install -r requirements.txt
-python main.py
-.
-├── core/
-│   └── physics.py         # Thermodynamic transition probability equations
-├── simulation/
-│   └── grid.py            # 2D Lattice model & periodic boundary conditions
-├── main.py                # Ensemble runner & visualization pipeline
-├── propagation_dynamics.png # High-resolution output graph
-├── requirements.txt       # Project dependencies
-└── README.md              # Documentation
+## 📜 License
+Distributed under the MIT License. See `LICENSE` for details.
